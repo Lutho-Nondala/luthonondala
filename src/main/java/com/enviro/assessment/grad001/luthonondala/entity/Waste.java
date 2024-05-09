@@ -1,5 +1,6 @@
 package com.enviro.assessment.grad001.luthonondala.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +17,7 @@ public class Waste {
     private String description;
     private String disposalGuidelines;
     private String recyclingTips;
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;

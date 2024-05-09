@@ -3,6 +3,9 @@ package com.enviro.assessment.grad001.luthonondala.controller;
 import com.enviro.assessment.grad001.luthonondala.entity.Waste;
 import com.enviro.assessment.grad001.luthonondala.service.WasteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,10 +16,10 @@ public class WasteController {
     @Autowired
     private WasteService service;
 
-    @PostMapping("create")
-    public Waste create(@RequestBody Waste waste){
+    @PostMapping(value = "create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Waste> create(@RequestPart("Waste") Waste waste, @RequestPart("Category") long id){
         try {
-            return this.service.create(waste);
+            return ResponseEntity.status(HttpStatus.OK).body(this.service.create(waste, id));
         } catch (Exception e){
             System.out.println(e.getMessage());
             return null;
@@ -24,9 +27,9 @@ public class WasteController {
     }
 
     @GetMapping("read/{id}")
-    public Waste read(@PathVariable long id){
+    public ResponseEntity<Waste> read(@PathVariable long id){
         try {
-            return this.service.read(id);
+            return ResponseEntity.status(HttpStatus.OK).body(this.service.read(id));
         } catch (Exception e){
             System.out.println(e.getMessage());
             return null;

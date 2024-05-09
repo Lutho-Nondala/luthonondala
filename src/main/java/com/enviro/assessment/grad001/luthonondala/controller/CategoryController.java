@@ -2,7 +2,10 @@ package com.enviro.assessment.grad001.luthonondala.controller;
 
 import com.enviro.assessment.grad001.luthonondala.entity.Category;
 import com.enviro.assessment.grad001.luthonondala.service.CategoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,14 +13,15 @@ import java.util.Locale;
 
 @RestController
 @RequestMapping("enviro/category/")
+@Slf4j
 public class CategoryController {
     @Autowired
     private CategoryService service;
 
     @PostMapping("create")
-    public Category create(@RequestBody Category category){
+    public ResponseEntity<Category> create(@RequestBody Category category){
         try {
-            return this.service.create(category);
+            return ResponseEntity.status(HttpStatus.OK).body(this.service.create(category));
         } catch (Exception e){
             System.out.println(e.getMessage());
             return null;
@@ -25,9 +29,9 @@ public class CategoryController {
     }
 
     @GetMapping("read/{id}")
-    public Category read(@PathVariable long id){
+    public ResponseEntity<Category> read(@PathVariable long id){
         try {
-            return this.service.read(id);
+            return ResponseEntity.status(HttpStatus.OK).body(this.service.read(id));
         } catch (Exception e){
             System.out.println(e.getMessage());
             return null;
@@ -35,9 +39,9 @@ public class CategoryController {
     }
 
     @PutMapping("update")
-    public Category update(@RequestBody Category category){
+    public ResponseEntity<Category> update(@RequestBody Category category){
         try {
-            return this.service.update(category);
+            return ResponseEntity.status(HttpStatus.OK).body(this.service.update(category));
         } catch (Exception e){
             System.out.println(e.getMessage());
             return null;
@@ -54,9 +58,9 @@ public class CategoryController {
     }
 
     @GetMapping("getAll")
-    public List<Category> getAll(){
+    public ResponseEntity<List<Category>> getAll(){
         try {
-            return this.service.getAll();
+            return ResponseEntity.status(HttpStatus.OK).body(this.service.getAll());
         } catch (Exception e){
             System.out.println(e.getMessage());
             return null;

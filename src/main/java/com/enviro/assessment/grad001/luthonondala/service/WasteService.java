@@ -1,5 +1,6 @@
 package com.enviro.assessment.grad001.luthonondala.service;
 
+import com.enviro.assessment.grad001.luthonondala.entity.Category;
 import com.enviro.assessment.grad001.luthonondala.entity.Waste;
 import com.enviro.assessment.grad001.luthonondala.repository.WasteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,12 @@ import java.util.List;
 public class WasteService {
     @Autowired
     private WasteRepository repository;
+    @Autowired
+    private CategoryService categoryService;
 
-    public Waste create(Waste waste){
+    public Waste create(Waste waste, long id){
+        Category category = this.categoryService.read(id);
+        waste.setCategory(category);
         return repository.save(waste);
     }
 
