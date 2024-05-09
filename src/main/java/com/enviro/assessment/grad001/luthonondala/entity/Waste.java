@@ -17,7 +17,7 @@ public class Waste {
     private String description;
     private String disposalGuidelines;
     private String recyclingTips;
-    @JsonBackReference
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;

@@ -1,5 +1,6 @@
 package com.enviro.assessment.grad001.luthonondala.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class Category {
     @GeneratedValue
     private long id;
     private String category;
-    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category", fetch = FetchType.LAZY)
     private Set<Waste> wastes;
 
