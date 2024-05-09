@@ -37,9 +37,9 @@ public class WasteController {
     }
 
     @PutMapping("update")
-    public Waste update(@RequestBody Waste waste){
+    public ResponseEntity<Waste> update(@RequestBody Waste waste){
         try {
-            return this.service.update(waste);
+            return ResponseEntity.status(HttpStatus.OK).body(this.service.update(waste));
         } catch (Exception e){
             System.out.println(e.getMessage());
             return null;
@@ -56,9 +56,19 @@ public class WasteController {
     }
 
     @GetMapping("getAll")
-    public List<Waste> getAll(){
+    public ResponseEntity<List<Waste>> getAll(){
         try {
-            return this.service.getAll();
+            return ResponseEntity.status(HttpStatus.OK).body(this.service.getAll());
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    @PutMapping(value = "updateCategory", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Waste> updateCategory(@RequestPart("Waste ID") long wasteId, @RequestPart("Category ID") long categoryId){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(this.service.updateCategory(wasteId, categoryId));
         } catch (Exception e){
             System.out.println(e.getMessage());
             return null;

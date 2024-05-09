@@ -47,11 +47,22 @@ class WasteControllerTest {
     @Test
     @org.junit.jupiter.api.Order(1)
     void create() {
+        //This is where you create a category to add to the waste
+        String urlToCreateCategories = "http://localhost:" + this.port + "/enviro/category/create";
+
+        Category plasticCategory = new Category.Builder().setCategory("Plastic").build();
+
+        this.category = this.restTemplate.postForEntity(
+                urlToCreateCategories,
+                plasticCategory,
+                Category.class
+        ).getBody();
+        log.info("Created Category: {}", this.category);
+
+        //Now starts the code to test the "create" method for the WasteController
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf(MediaType.MULTIPART_FORM_DATA_VALUE));
-
-        this.category = this.categoryService.create(new Category.Builder().setCategory("Plastic").build());
-        log.info(this.category.toString());
 
         this.waste = new Waste.Builder()
                 .setDescription("Plastic Bottle")
@@ -102,14 +113,46 @@ class WasteControllerTest {
     }
 
     @Test
-    @org.junit.jupiter.api.Order(5)
+    @org.junit.jupiter.api.Order(4)
+    void updateCategory() {
+
+        //This is where 2 extra Categories are made for the test
+
+        String urlToCreateCategories = "http://localhost:" + this.port + "/enviro/category/create";
+
+        Category category1 = new Category.Builder().setCategory("Foam").build();
+        Category category2 = new Category.Builder().setCategory("Fabric").build();
+
+        ResponseEntity<Category> responseCategory1 = this.restTemplate.postForEntity(urlToCreateCategories, category1, Category.class);
+        log.info("Added Category Response: {}", responseCategory1.getBody());
+
+        ResponseEntity<Category> responseCategory2 = this.restTemplate.postForEntity(urlToCreateCategories, category2, Category.class);
+        log.info("Added Category Response: {}", responseCategory2.getBody());
+
+        //This is where the code to test the "updateCategory" method begins
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.valueOf(MediaType.MULTIPART_FORM_DATA_VALUE));
+
+        MultiValueMap<String, Object> body= new LinkedMultiValueMap<>();
+        body.add("Waste ID", 1);
+        body.add("Category ID", 2);
+
+        HttpEntity<?> updateEntity = new HttpEntity<MultiValueMap<String, Object>>(body,headers);
+
+        String url = baseUrl + "updateCategory";
+        this.restTemplate.put(url, updateEntity);
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(6)
     void delete() {
         String url = baseUrl + "delete/1";
         this.restTemplate.delete(url);
     }
 
     @Test
-    @org.junit.jupiter.api.Order(4)
+    @org.junit.jupiter.api.Order(5)
     void getAll() {
         String url = baseUrl + "getAll";
         ResponseEntity<Waste[]> response = this.restTemplate.getForEntity(url, Waste[].class);
